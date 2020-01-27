@@ -1,8 +1,11 @@
+
 pipeline {
-    agent any;
-   tools { 
-        maven 'Maven 3.3.9' 
-        jdk 'jdk8' 
+    agent any
+    tools { 
+        maven 'maven' 
+    }
+    triggers {
+        pollSCM('*/15 * * * *')
     }
     options { disableConcurrentBuilds() }
     stages {
@@ -13,9 +16,13 @@ pipeline {
         }
 stage('Cleanup') {
             steps {
-                sh 'mvn clean'
+                sh 'maven clean'
             }
         }
+       /* stage('Check Style, FindBugs, PMD') {
+            steps {
+                sh './gradlew --no-daemon checkstyleMain checkstyleTest findbugsMain findbugsTest pmdMain pmdTest cpdCheck'
+            }
         post {
         always {
                 step([
@@ -35,10 +42,10 @@ stage('Cleanup') {
                 ])
         }
       }
-    }
+    } */
 stage('Test') {
             steps {
-                sh 'mvn clean'
+                sh 'mvn test'
             }
             post {
                 always {
@@ -48,18 +55,18 @@ stage('Test') {
         }
         stage('Build') {
             steps {
-                sh 'mvn  build'
+                sh 'mvn build'
             }
         }
         stage('Update Docker UAT image') {
             when { branch "master" }
             steps {
                 sh '''
-docker login -u "tejpalborkar10" -p "tejpal123"
+					docker login -u "tejpalborkar10" -p "tejpal123"
                     docker build --no-cache -t spring-boot-websocket-chat-demo .
                     docker tag spring-boot-websocket-chat-demo:latest tejpalborkar10/spring-boot-websocket-chat-demo:latest
                     docker push tejpalborkar10/spring-boot-websocket-chat-demo:latest
-docker rmi tejpalborkar10/spring-boot-websocket-chat-demo:latest
+					docker rmi tejpalborkar10/spring-boot-websocket-chat-demo:latest
                 '''
             }
         }
@@ -67,8 +74,7 @@ docker rmi tejpalborkar10/spring-boot-websocket-chat-demo:latest
             when { branch "master" }
             steps {
                 sh '''
-docker login -u "tejpalborkar10" -p "tejpal123"
-                    docker pull tejpalborkar10/spring-boot-websocket-chat-demo:latest
+					docker pull tejpalborkar10/spring-boot-websocket-chat-demo:latest
                     docker stop spring-boot-websocket-chat-demo
                     docker rm spring-boot-websocket-chat-demo
                     docker run -p 9090:9090 --name spring-boot-websocket-chat-demo -t -d tejpalborkar10/spring-boot-websocket-chat-demo:latest
@@ -80,11 +86,11 @@ docker login -u "tejpalborkar10" -p "tejpal123"
             when { buildingTag() }
             steps {
                 sh '''
-docker login -u "tejpalborkar10" -p "tejpal123"
+					docker login -u "tejpalborkar10" -p "tejpal123"
                     docker build --no-cache -t spring-boot-websocket-chat-demo .
                     docker tag person:latest tejpalborkar10/spring-boot-websocket-chat-demo:${TAG_NAME}
                     docker push tejpalborkar10/spring-boot-websocket-chat-demo:${TAG_NAME}
-docker rmi $(docker images -f “dangling=true” -q)
+					docker rmi $(docker images -f "dangling=true" -q)
                '''
             }
         }
