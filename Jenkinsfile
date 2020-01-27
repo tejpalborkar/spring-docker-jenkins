@@ -1,7 +1,8 @@
 pipeline {
     agent any
-    triggers {
-        pollSCM('*/15 * * * *')
+   tools { 
+        maven 'Maven 3.3.9' 
+        jdk 'jdk8' 
     }
     options { disableConcurrentBuilds() }
     stages {
@@ -12,13 +13,9 @@ pipeline {
         }
 stage('Cleanup') {
             steps {
-                sh './gradlew --no-daemon clean'
+                sh 'mvn clean'
             }
         }
-        stage('Check Style, FindBugs, PMD') {
-            steps {
-                sh './gradlew --no-daemon checkstyleMain checkstyleTest findbugsMain findbugsTest pmdMain pmdTest cpdCheck'
-            }
         post {
         always {
                 step([
@@ -41,7 +38,7 @@ stage('Cleanup') {
     }
 stage('Test') {
             steps {
-                sh './gradlew --no-daemon check'
+                sh 'mvn clean'
             }
             post {
                 always {
@@ -51,18 +48,18 @@ stage('Test') {
         }
         stage('Build') {
             steps {
-                sh './gradlew --no-daemon build'
+                sh 'mvn  build'
             }
         }
         stage('Update Docker UAT image') {
             when { branch "master" }
             steps {
                 sh '''
-docker login -u "<userid>" -p "<password>"
-                    docker build --no-cache -t person .
-                    docker tag person:latest amritendudockerhub/person:latest
-                    docker push amritendudockerhub/person:latest
-docker rmi person:latest
+docker login -u "tejpalborkar10" -p "tejpal123"
+                    docker build --no-cache -t spring-boot-websocket-chat-demo .
+                    docker tag spring-boot-websocket-chat-demo:latest tejpalborkar10/spring-boot-websocket-chat-demo:latest
+                    docker push tejpalborkar10/spring-boot-websocket-chat-demo:latest
+docker rmi tejpalborkar10/spring-boot-websocket-chat-demo:latest
                 '''
             }
         }
@@ -70,11 +67,11 @@ docker rmi person:latest
             when { branch "master" }
             steps {
                 sh '''
-docker login -u "<userid>" -p "<password>"
-                    docker pull amritendudockerhub/person:latest
-                    docker stop person
-                    docker rm person
-                    docker run -p 9090:9090 --name person -t -d amritendudockerhub/person
+docker login -u "tejpalborkar10" -p "tejpal123"
+                    docker pull tejpalborkar10/spring-boot-websocket-chat-demo:latest
+                    docker stop spring-boot-websocket-chat-demo
+                    docker rm spring-boot-websocket-chat-demo
+                    docker run -p 9090:9090 --name spring-boot-websocket-chat-demo -t -d tejpalborkar10/spring-boot-websocket-chat-demo:latest
                     docker rmi -f $(docker images -q --filter dangling=true)
                 '''
             }
@@ -83,10 +80,10 @@ docker login -u "<userid>" -p "<password>"
             when { buildingTag() }
             steps {
                 sh '''
-docker login -u "<userid>" -p "<password>"
-                    docker build --no-cache -t person .
-                    docker tag person:latest amritendudockerhub/person:${TAG_NAME}
-                    docker push amritendudockerhub/person:${TAG_NAME}
+docker login -u "tejpalborkar10" -p "tejpal123"
+                    docker build --no-cache -t spring-boot-websocket-chat-demo .
+                    docker tag person:latest tejpalborkar10/spring-boot-websocket-chat-demo:${TAG_NAME}
+                    docker push tejpalborkar10/spring-boot-websocket-chat-demo:${TAG_NAME}
 docker rmi $(docker images -f “dangling=true” -q)
                '''
             }
