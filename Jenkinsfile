@@ -12,7 +12,7 @@ pipeline {
         }
 stage('Cleanup') {
             steps {
-                sh './gradlew --no-daemon clean'
+                sh 'mvn clean'
             }
         }
         stage('Check Style, FindBugs, PMD') {
