@@ -3,6 +3,9 @@ pipeline {
     triggers {
         pollSCM('*/15 * * * *')
     }
+    tools {
+        maven 'apache-maven-3.3.9' 
+    }
     options { disableConcurrentBuilds() }
     stages {
         stage('Permissions') {
@@ -15,10 +18,6 @@ stage('Cleanup') {
                 sh 'mvn clean'
             }
         }
-        stage('Check Style, FindBugs, PMD') {
-            steps {
-                sh './gradlew --no-daemon checkstyleMain checkstyleTest findbugsMain findbugsTest pmdMain pmdTest cpdCheck'
-            }
         post {
         always {
                 step([
@@ -41,7 +40,7 @@ stage('Cleanup') {
     }
 stage('Test') {
             steps {
-                sh './gradlew --no-daemon check'
+                sh 'mvn clean'
             }
             post {
                 always {
@@ -51,7 +50,7 @@ stage('Test') {
         }
         stage('Build') {
             steps {
-                sh './gradlew --no-daemon build'
+                sh 'mvn build'
             }
         }
         stage('Update Docker UAT image') {
