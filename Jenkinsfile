@@ -3,9 +3,8 @@ pipeline {
     triggers {
         pollSCM('*/15 * * * *')
     }
-   tools { 
-        maven 'Maven 3.3.9' 
-        jdk 'jdk8' 
+    tools {
+        maven 'apache-maven-3.3.9' 
     }
     options { disableConcurrentBuilds() }
     stages {
@@ -41,7 +40,7 @@ stage('Cleanup') {
     }
 stage('Test') {
             steps {
-                sh 'mvn clean'
+                sh './gradlew --no-daemon check'
             }
             post {
                 always {
@@ -51,7 +50,7 @@ stage('Test') {
         }
         stage('Build') {
             steps {
-                sh 'mvn  build'
+                sh './gradlew --no-daemon build'
             }
         }
         stage('Update Docker UAT image') {
