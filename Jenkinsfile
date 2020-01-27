@@ -3,8 +3,9 @@ pipeline {
     triggers {
         pollSCM('*/15 * * * *')
     }
-    tools {
-        maven 'apache-maven-3.3.9' 
+   tools { 
+        maven 'Maven 3.3.9' 
+        jdk 'jdk8' 
     }
     options { disableConcurrentBuilds() }
     stages {
@@ -50,7 +51,7 @@ stage('Test') {
         }
         stage('Build') {
             steps {
-                sh 'mvn build'
+                sh 'mvn  build'
             }
         }
         stage('Update Docker UAT image') {
