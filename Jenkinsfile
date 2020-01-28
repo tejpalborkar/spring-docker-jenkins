@@ -51,7 +51,7 @@ stage('Test') {
             }
             post {
                 always {
-                    junit 'build/test-results/test/*.xml'
+                    junit 'target/test-results/test/*.xml'
                 }
             }
         }
