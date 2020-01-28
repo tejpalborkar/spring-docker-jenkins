@@ -57,7 +57,7 @@ stage('Test') {
         }
         stage('Build') {
             steps {
-                sh 'mvn build'
+                sh 'mvn -B -DskipTests clean package'
             }
         }
         stage('Update Docker UAT image') {
