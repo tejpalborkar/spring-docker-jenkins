@@ -18,7 +18,7 @@ pipeline {
         }
 stage('Cleanup') {
             steps {
-                sh 'maven clean'
+                sh 'mvn clean'
             }
         }
        /* stage('Check Style, FindBugs, PMD') {
