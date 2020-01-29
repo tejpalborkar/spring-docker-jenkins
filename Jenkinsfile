@@ -64,6 +64,10 @@ stage('Test') {
             when { branch "master" }
             steps {
                 sh '''
+                curl -fsSLO https://get.docker.com/builds/Linux/x86_64/docker-17.04.0-ce.tgz \
+  && tar xzvf docker-17.04.0-ce.tgz \
+  && mv docker/docker /usr/local/bin \
+  && rm -r docker docker-17.04.0-ce.tgz
 					docker login -u "tejpalborkar10" -p "tejpal123"
                     docker build --no-cache -t spring-boot-websocket-chat-demo .
                     docker tag spring-boot-websocket-chat-demo:latest tejpalborkar10/spring-boot-websocket-chat-demo:latest
