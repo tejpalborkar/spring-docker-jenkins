@@ -68,7 +68,7 @@
 				<version>1.4.0</version>
 				<configuration>
 					<!-- replace `callicoder` with your docker id-->
-					<repository>tejpalborkar10/spring-boot-websocket-chat-demo</repository>
+					<repository>tejpalborkar10/spring-docker-jenkins</repository>
 					<tag>${project.version}</tag>
 					<buildArgs>
 						<JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
