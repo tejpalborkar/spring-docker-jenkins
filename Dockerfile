@@ -17,4 +17,4 @@ ARG JAR_FILE=target/spring-docker-jenkins-0.0.1-SNAPSHOT.jar
 ADD ${JAR_FILE} spring-docker-jenkins.jar
 
 # Run the jar file 
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/spring-docker-jenkins.jar"]
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/spring-docker-jenkins-0.0.1-SNAPSHOT.jar"]
