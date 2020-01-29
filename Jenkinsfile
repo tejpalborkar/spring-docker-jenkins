@@ -69,10 +69,10 @@ stage('Test') {
   && mv docker/docker /usr/local/bin \
   && rm -r docker docker-17.04.0-ce.tgz
 					docker login -u "tejpalborkar10" -p "tejpal123"
-                    docker build --no-cache -t spring-boot-websocket-chat-demo .
-                    docker tag spring-boot-websocket-chat-demo:latest tejpalborkar10/spring-boot-websocket-chat-demo:latest
-                    docker push tejpalborkar10/spring-boot-websocket-chat-demo:latest
-					docker rmi tejpalborkar10/spring-boot-websocket-chat-demo:latest
+                    docker build --no-cache -t spring-docker-jenkins .
+                    docker tag spring-docker-jenkins:latest tejpalborkar10/spring-docker-jenkins:latest
+                    docker push tejpalborkar10/spring-docker-jenkins:latest
+					docker rmi tejpalborkar10/spring-docker-jenkins:latest
                 '''
             }
         }
@@ -80,10 +80,10 @@ stage('Test') {
             when { branch "master" }
             steps {
                 sh '''
-					docker pull tejpalborkar10/spring-boot-websocket-chat-demo:latest
-                    docker stop spring-boot-websocket-chat-demo
-                    docker rm spring-boot-websocket-chat-demo
-                    docker run -p 9090:9090 --name spring-boot-websocket-chat-demo -t -d tejpalborkar10/spring-boot-websocket-chat-demo:latest
+					docker pull tejpalborkar10/spring-docker-jenkins:latest
+                    docker stop spring-docker-jenkins
+                    docker rm spring-docker-jenkins
+                    docker run -p 9090:9090 --name spring-docker-jenkins -t -d tejpalborkar10/spring-docker-jenkins:latest
                     docker rmi -f $(docker images -q --filter dangling=true)
                 '''
             }
@@ -93,9 +93,9 @@ stage('Test') {
             steps {
                 sh '''
 					docker login -u "tejpalborkar10" -p "tejpal123"
-                    docker build --no-cache -t spring-boot-websocket-chat-demo .
-                    docker tag person:latest tejpalborkar10/spring-boot-websocket-chat-demo:${TAG_NAME}
-                    docker push tejpalborkar10/spring-boot-websocket-chat-demo:${TAG_NAME}
+                    docker build --no-cache -t spring-docker-jenkins .
+                    docker tag person:latest tejpalborkar10/spring-docker-jenkins:${TAG_NAME}
+                    docker push tejpalborkar10/spring-docker-jenkins:${TAG_NAME}
 					docker rmi $(docker images -f "dangling=true" -q)
                '''
             }
