@@ -81,9 +81,9 @@ stage('Test') {
             steps {
                 sh '''
 					docker pull tejpalborkar10/spring-docker-jenkins:latest
-                    docker stop spring-docker-jenkins
-                    docker rm spring-docker-jenkins
-                    docker run -p 9090:9090 --name spring-docker-jenkins -t -d tejpalborkar10/spring-docker-jenkins:latest
+                    docker stop tejpalborkar10/spring-docker-jenkins:latest
+                    docker rm tejpalborkar10/spring-docker-jenkins:latest
+                    docker run --rm -d -p 5000:8080 --name spring-docker-jenkins -t -d tejpalborkar10/spring-docker-jenkins:latest
                     docker rmi -f $(docker images -q --filter dangling=true)
                 '''
             }
