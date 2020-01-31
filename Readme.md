@@ -37,3 +37,19 @@ mvn spring-boot:run
 You can find the tutorial for this application on my blog -
 
 https://www.callicoder.com/spring-boot-websocket-chat-example/
+
+## Docker
+
+## 1.  Build Docker imaage
+docker build --no-cache -t spring-docker-jenkins .
+
+## 2.  Tag docker image
+docker tag spring-docker-jenkins:latest tejpalborkar10/spring-docker-jenkins:latest
+
+## 3. Push image to docker hub
+docker push tejpalborkar10/spring-docker-jenkins:latest
+
+## 4. Below command will run the docker container on port 9091
+docker run --rm -d -p 9091:8080 --name spring-docker-jenkins -t -d tejpalborkar10/spring-docker-jenkins:latest
+
+
